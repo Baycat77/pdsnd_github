@@ -202,35 +202,34 @@ def user_stats(df,city):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+
 def show_raw_data(df):
     """Displays raw data, five lines at a time, at user's request."""
 
-    i = 1
-    while True:
-       show_data = input('\nWould you like to see 5 lines of raw data? Enter yes or no. \n')
-       if show_data.lower() != 'yes':
-           break
-       else:
-           #Set data frame index to blank so printout won't confuse the user.
-           blankIndex=[''] * len(df)
-           df.index = blankIndex
-           i+=5
-           print('Raw data:' + '\n')
-           print(df[i-5:i])
-           print('-'*40)
-           while True:
-               show_more = input('\nWould you like to see 5 more lines of raw data? Enter yes or no. \n')
-               if show_more.lower() != 'yes':
-                   return
+    def print1(df,j):
+        print('Raw data:' + '\n')
+        print(df[j-5:j])
+        print('-'*40)
+
+    show_data = input('\nWould you like to see 5 lines of raw data? Enter yes or no. \n')
+    if show_data.lower() == 'yes':
+       blankIndex=[''] * len(df)
+       df.index = blankIndex
+       for i, item in enumerate(df['User Type']):
+           j = (i+1)*5
+           if j > len(df.index):
+               print('No more data to display.')
+               print('-'*40)
+               break
+           else:
+               if i == 0:
+                   print1(df,j)
                else:
-                   if i+5 > len(df.index):
-                      print('No more data to display.')
-                      print('_'*40)
+                   show_more = input('n\Would you like to see 5 more lines? Enter yes or no. \n')
+                   if show_more.lower() == 'yes':
+                       print1(df,j)
                    else:
-                      i+=5
-                      print('Raw data:' + '\n')
-                      print(df[i-5:i])
-                      print('-'*40)
+                       break
 
 
 def main():
