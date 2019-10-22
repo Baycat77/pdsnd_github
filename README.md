@@ -16,3 +16,6 @@ https://dbader.org/products/
 
 Bikeshare data available online:
 https://www.bikeshare.com/data/
+
+Washington, DC bike station map:
+https://secure.capitalbikeshare.com/map/
