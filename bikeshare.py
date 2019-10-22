@@ -18,38 +18,71 @@ def get_filters():
     print('Hello! Let\'s explore some US bikeshare data!')
     # Get user input for city (chicago, new york city, washington).
 
-    while True:
-        try:
-            city = input("Enter chicago, new york city, or washington: ")
-            city = city.lower()
-        except ValueError:
-            continue
-        if city in ('chicago', 'new york city', 'washington'):
-            break
+db_city = {
+        1: {'city_name': 'chicago'},
+        2: {'city_name': 'new york city'},
+        3: {'city_name': 'washington'},
+    }
+    db_month = {
+        1: {'month_name': 'january'},
+        2: {'month_name': 'february'},
+        3: {'month_name': 'march'},
+        4: {'month_name': 'april'},
+        5: {'month_name': 'may'},
+        6: {'month_name': 'june'},
+        7: {'month_name': 'all'},
+    }
+    db_dow = {
+        1: {'dow_name': 'Sunday'},
+        2: {'dow_name': 'Monday'},
+        3: {'dow_name': 'Tuesday'},
+        4: {'dow_name': 'Wednesday'},
+        5: {'dow_name': 'Thursday'},
+        6: {'dow_name': 'Friday'},
+        7: {'dow_name': 'Saturday'},
+        8: {'dow_name': 'all'},
+    }
 
-    # Get user input for month (all, january, february, ... , june)
-    while True:
-        try:
-            month = input("Enter all, january, february, ... june: ")
-            month = month.lower()
-        except ValueError:
-            continue
-        if month in ('all', 'january', 'february', 'march',
-                     'april', 'may', 'june'):
-            break
+    def input1(flag,db_city,db_month,db_dow):
+        if flag == 1:
+            dt_base = db_city
+            dt_name = 'city_name'
+            dt_question = 'Select a city: '
+        elif flag == 2:
+            dt_base = db_month
+            dt_name = 'month_name'
+            dt_question = 'Select a month: '
+        else:
+            dt_base = db_dow
+            dt_name = 'dow_name'
+            dt_question = 'Select day of week: '
+        while True:
+            print(dt_question)
+            #x = int(input())
+            z = int(input(dt_question))
 
-    # Get user input for day of week (all, monday, tuesday, ... sunday)
-    while True:
-        try:
-            day = input("Enter all, monday, tuesday, ... sunday: ")
-            day = day.lower()
-        except ValueError:
-            continue
-        if day in ('all','monday','tuesday','wednesday','thursday',
-                   'friday','saturday','sunday'):
-            break
+            if z in dt_base.keys():
+                print("\nYou have chosen {0}".format(dt_base[z][dt_name]))
+                print('-'*40)
+                return dt_base[z][dt_name]
+                break
+            else:
+                print('\nInvalid input.  Please try again.')
 
-    print('-'*40)
+    print("Cities:")
+    for x, y in db_city.items():
+        print(x, ':', db_city[x]['city_name'])
+    city = input1(1,db_city,db_month,db_dow)
+        ######################################
+    print("Months:")
+    for x, y in db_month.items():
+        print(x, ':', db_month[x]['month_name'])
+    month = input1(2,db_city,db_month,db_dow)
+        ######################################
+    print("Days of the week:")
+    for x, y in db_dow.items():
+        print(x, ':', db_dow[x]['dow_name'])
+    day = input1(3,db_city,db_month,db_dow)
     return city, month, day
 
 
@@ -116,23 +149,26 @@ def time_stats(df):
 def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
 
+    def most_common(mc,df):
+        m_common = df[mc].mode()[0]
+        return m_common
+
+    """Displays statistics on the most popular stations and trip."""
+
     print('\nCalculating The Most Popular Stations and Trip...\n')
     start_time = time.time()
 
     # Display most commonly used start station
-    most_common_start_station = df['Start Station'].mode()[0]
-    print('Most common start station:', most_common_start_station)
+    print('Most common start station:', most_common('Start Station',df))
 
 
     # Display most commonly used end station
-    most_common_end_station = df['End Station'].mode()[0]
-    print('Most common end station:', most_common_end_station)
+    print('Most common end station:', most_common('End Station',df))
 
 
     # Display most frequent combination of start station and end station trip
     df['trip'] = df['Start Station'] + ' | ' + df['End Station']
-    most_common_trip = df['trip'].mode()[0]
-    print('Most common trip:', most_common_trip)
+    print('Most common trip:', most_common('trip',df))
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -202,35 +238,34 @@ def user_stats(df,city):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+
 def show_raw_data(df):
     """Displays raw data, five lines at a time, at user's request."""
 
-    i = 1
-    while True:
-       show_data = input('\nWould you like to see 5 lines of raw data? Enter yes or no. \n')
-       if show_data.lower() != 'yes':
-           break
-       else:
-           #Set data frame index to blank so printout won't confuse the user.
-           blankIndex=[''] * len(df)
-           df.index = blankIndex
-           i+=5
-           print('Raw data:' + '\n')
-           print(df[i-5:i])
-           print('-'*40)
-           while True:
-               show_more = input('\nWould you like to see 5 more lines of raw data? Enter yes or no. \n')
-               if show_more.lower() != 'yes':
-                   return
+    def print1(df,j):
+        print('Raw data:' + '\n')
+        print(df[j-5:j])
+        print('-'*40)
+
+    show_data = input('\nWould you like to see 5 lines of raw data? Enter yes or no. \n')
+    if show_data.lower() == 'yes':
+       blankIndex=[''] * len(df)
+       df.index = blankIndex
+       for i, item in enumerate(df['User Type']):
+           j = (i+1)*5
+           if j > len(df.index):
+               print('No more data to display.')
+               print('-'*40)
+               break
+           else:
+               if i == 0:
+                   print1(df,j)
                else:
-                   if i+5 > len(df.index):
-                      print('No more data to display.')
-                      print('_'*40)
+                   show_more = input('n\Would you like to see 5 more lines? Enter yes or no. \n')
+                   if show_more.lower() == 'yes':
+                       print1(df,j)
                    else:
-                      i+=5
-                      print('Raw data:' + '\n')
-                      print(df[i-5:i])
-                      print('-'*40)
+                       break
 
 
 def main():
