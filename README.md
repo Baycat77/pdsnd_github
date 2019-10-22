@@ -13,3 +13,6 @@ Bikeshare.py, README.md, chicago.csv, new_york_city.csv, washington.csv
 ### Credits
 "Python Tricks: The Book" by Dan Bader:
 https://dbader.org/products/
+
+Bikeshare data available online:
+https://www.bikeshare.com/data/
