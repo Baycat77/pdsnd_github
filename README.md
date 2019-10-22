@@ -2,14 +2,13 @@
 October 21, 2019
 
 ### Project Title
-Replace the Project Title
+Refactor Bikeshare Code
 
 ### Description
-Describe what your project is about and what it does
+Refactor bikeshare code to improve efficiency and readability
 
 ### Files used
-Include the files used
+Bikeshare.py, README.md, chicago.csv, new_york_city.csv, washington.csv
 
 ### Credits
 It's important to give proper credit. Add links to any repo that inspired you or blogposts you consulted.
-
