@@ -18,38 +18,71 @@ def get_filters():
     print('Hello! Let\'s explore some US bikeshare data!')
     # Get user input for city (chicago, new york city, washington).
 
-    while True:
-        try:
-            city = input("Enter chicago, new york city, or washington: ")
-            city = city.lower()
-        except ValueError:
-            continue
-        if city in ('chicago', 'new york city', 'washington'):
-            break
+db_city = {
+        1: {'city_name': 'chicago'},
+        2: {'city_name': 'new york city'},
+        3: {'city_name': 'washington'},
+    }
+    db_month = {
+        1: {'month_name': 'january'},
+        2: {'month_name': 'february'},
+        3: {'month_name': 'march'},
+        4: {'month_name': 'april'},
+        5: {'month_name': 'may'},
+        6: {'month_name': 'june'},
+        7: {'month_name': 'all'},
+    }
+    db_dow = {
+        1: {'dow_name': 'Sunday'},
+        2: {'dow_name': 'Monday'},
+        3: {'dow_name': 'Tuesday'},
+        4: {'dow_name': 'Wednesday'},
+        5: {'dow_name': 'Thursday'},
+        6: {'dow_name': 'Friday'},
+        7: {'dow_name': 'Saturday'},
+        8: {'dow_name': 'all'},
+    }
 
-    # Get user input for month (all, january, february, ... , june)
-    while True:
-        try:
-            month = input("Enter all, january, february, ... june: ")
-            month = month.lower()
-        except ValueError:
-            continue
-        if month in ('all', 'january', 'february', 'march',
-                     'april', 'may', 'june'):
-            break
+    def input1(flag,db_city,db_month,db_dow):
+        if flag == 1:
+            dt_base = db_city
+            dt_name = 'city_name'
+            dt_question = 'Select a city: '
+        elif flag == 2:
+            dt_base = db_month
+            dt_name = 'month_name'
+            dt_question = 'Select a month: '
+        else:
+            dt_base = db_dow
+            dt_name = 'dow_name'
+            dt_question = 'Select day of week: '
+        while True:
+            print(dt_question)
+            #x = int(input())
+            z = int(input(dt_question))
 
-    # Get user input for day of week (all, monday, tuesday, ... sunday)
-    while True:
-        try:
-            day = input("Enter all, monday, tuesday, ... sunday: ")
-            day = day.lower()
-        except ValueError:
-            continue
-        if day in ('all','monday','tuesday','wednesday','thursday',
-                   'friday','saturday','sunday'):
-            break
+            if z in dt_base.keys():
+                print("\nYou have chosen {0}".format(dt_base[z][dt_name]))
+                print('-'*40)
+                return dt_base[z][dt_name]
+                break
+            else:
+                print('\nInvalid input.  Please try again.')
 
-    print('-'*40)
+    print("Cities:")
+    for x, y in db_city.items():
+        print(x, ':', db_city[x]['city_name'])
+    city = input1(1,db_city,db_month,db_dow)
+        ######################################
+    print("Months:")
+    for x, y in db_month.items():
+        print(x, ':', db_month[x]['month_name'])
+    month = input1(2,db_city,db_month,db_dow)
+        ######################################
+    print("Days of the week:")
+    for x, y in db_dow.items():
+        print(x, ':', db_dow[x]['dow_name'])
+    day = input1(3,db_city,db_month,db_dow)
     return city, month, day
 
 
